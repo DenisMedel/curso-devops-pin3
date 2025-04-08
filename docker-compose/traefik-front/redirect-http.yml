@@ -1,0 +1,7 @@
+# Redireccionamiento HTTP a HTTPS
+http:
+  middlewares:
+    redirect-http:
+      redirectScheme:
+        scheme: https
+        port: "443"

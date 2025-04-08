@@ -1,0 +1,25 @@
+version: '3.5'
+services:
+
+  node:
+    image: prom/node-exporter:v1.9.0
+    container_name: node-exporter
+    command:
+      - '--path.rootfs=/rootfs'
+    volumes:
+      - /:/rootfs:ro
+    restart: unless-stopped
+    ports:
+      - 9100:9100
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.50.0
+    container_name: cadvisor
+    ports:
+      - 8888:8080
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker:/var/lib/docker:ro
+    restart: unless-stopped

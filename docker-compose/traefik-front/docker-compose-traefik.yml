@@ -1,0 +1,35 @@
+version: "3"
+
+services:
+  proxy:
+    image: traefik:2.9.9
+    container_name: traefik-front
+    command:
+      - '--entryPoints.web.address=:80'
+      - '--entrypoints.websecure.address=:443'
+      - '--entryPoints.websecure.http2.maxConcurrentStreams=2500'
+      - '--entryPoints.websecure.transport.respondingTimeouts.idleTimeout=30s'
+      - '--entryPoints.websecure.transport.respondingTimeouts.writeTimeout=300s'
+      - '--entryPoints.traefik.address=:9090'
+      - '--providers.file.directory=/etc/traefik/providers'
+      - '--certificatesresolvers.apd-monitor.acme.tlschallenge=true'
+      - '--certificatesresolvers.apd-monitor.acme.email=mi-mail@gmail.com'
+      - '--certificatesresolvers.apd-monitor.acme.storage=/letsencrypt/acme-curso-monitoreo.json'
+      - '--api=false'
+      - '--api.dashboard=false'
+      - '--api.insecure=false'
+      - '--accesslog=true'
+      - '--accesslog.format=json'
+      - '--accesslog.filepath=/var/log/access.log'
+      - '--accesslog.bufferingsize=1000'
+      - '--accesslog.fields.headers.names.X-Forwarded-For=keep'
+      - '--accesslog.fields.headers.names.x-cache=keep'
+      - '--log.level=DEBUG'
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./logs:/var/log
+      - ./providers:/etc/traefik/providers
+      - ./letsencrypt:/letsencrypt
+    restart: "unless-stopped"

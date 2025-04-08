@@ -1,0 +1,59 @@
+  - name: Prepara ambiente de despliegue
+    hosts: monitoreoNodes
+    gather_facts: false
+    tasks:
+
+    - name: Crea directorios del proyecto
+      file:
+         path: "{{ item }}"
+         state: directory
+      with_items:
+      - "{{static_home}}/agentes"
+      - "{{static_home}}/central"
+      - "{{static_home}}/central/loki"
+      - "{{static_home}}/central/prometheus"
+      - "{{static_home}}/central/promtail"
+
+    - name: Copia el docker-compose para agentes de monitoreo
+      template:
+        src:  ../monitoreo/agentes/docker-compose-agents.yml
+        dest: "{{ static_home }}/agentes/docker-compose-agents.yml"
+
+    - name: Copia el docker-compose para Aplicación de monitoreo
+      template:
+        src:  ../monitoreo/central/docker-compose.yml
+        dest: "{{ static_home }}/central/docker-compose.yml"
+
+    - name: Copia config Loki
+      template:
+        src:  ../monitoreo/central/loki/loki-config-yml
+        dest: "{{ static_home }}/central/loki/loki-config.yml"
+
+    - name: Copia config prometheus
+      template:
+        src:  ../monitoreo/central/prometheus/prometheus.yml
+        dest: "{{ static_home }}/central/prometheus/prometheus.yml"
+
+    - name: Copia config promtail
+      template:
+        src:  ../monitoreo/central/promtail/promtail.yml
+        dest: "{{ static_home }}/central/promtail/promtail.yml"        
+
+    - name: Levanta Agentes Monitoreo
+      shell: >
+        cd "{{static_home}}/agentes" &&
+        docker-compose -f docker-compose-agents.yml pull &&
+        docker-compose -f docker-compose-agents.yml up -d --force-recreate --remove-orphans &&
+        sleep 5 &&
+        docker-compose -f docker-compose-agents.yml ps
+
+    - name: Levanta Aplicación Monitoreo
+      shell: >
+        cd "{{static_home}}/central" &&
+        docker-compose -f docker-compose.yml pull &&
+        docker-compose -f docker-compose.yml up -d --force-recreate --remove-orphans &&
+        sleep 5 &&
+        docker-compose -f docker-compose.yml ps
+
+      register: shell_output
+    - debug: var=shell_output.stdout_lines

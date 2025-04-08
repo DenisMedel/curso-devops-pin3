@@ -1,0 +1,37 @@
+  - name: Prepara ambiente de despliegue
+    hosts: monitoreoNodes
+    gather_facts: false
+    tasks:
+
+    - name: Crea directorios del proyecto
+      file:
+         path: "{{ item }}"
+         state: directory
+      with_items:
+      - "{{static_home}}/traefik-front-certs/providers"
+
+    - name: Copia el docker-compose para Trafik Frontend
+      template:
+        src:  ../monitoreo/central/docker-compose-traefik.yml
+        dest: "{{ static_home }}/traefik-front-certs/docker-compose-traefik.yml"
+
+    - name: Copia el provider para Monitoreo Central
+      template:
+        src:  ../monitoreo/traefik-front-certs/curso-monitoreo.yml
+        dest: "{{ static_home }}/traefik-front-certs/providers/curso-monitoreo.yml"
+
+    - name: Copia el redirect de HTTP a HTTPs
+      template:
+        src:  ../monitoreo/traefik-front-certs/redirect-http.yml
+        dest: "{{ static_home }}/traefik-front-certs/docker-compose-traefik.yml"        
+
+    - name: Levanta Traefik de Frontend
+      shell: >
+        cd "{{static_home}}/traefik-front-certs" &&
+        docker-compose -f docker-compose-traefik.yml pull &&
+        docker-compose -f docker-compose-traefik.yml up -d --force-recreate --remove-orphans &&
+        sleep 5 &&
+        docker-compose -f docker-compose-traefik.yml ps
+
+      register: shell_output
+    - debug: var=shell_output.stdout_lines

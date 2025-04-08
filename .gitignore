@@ -1,0 +1,10 @@
+# Ansible
+vault-*
+inventory-*
+
+# Terraform
+docker-compose/terraform/.terraform/
+docker-compose/terraform/.terraform.lock.hcl
+docker-compose/terraform/lockstate/.terraform.lock.hcl
+docker-compose/terraform/lockstate/terraform.tfstate
+docker-compose/terraform/lockstate/.terraform

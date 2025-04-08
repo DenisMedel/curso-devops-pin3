@@ -1,0 +1,27 @@
+global:
+  scrape_interval: 10s
+
+scrape_configs:
+###### Monitoreo Servidores ######
+##################################
+
+  - job_name: 'node'
+    scrape_interval: 5s
+    static_configs:
+
+# Producción
+      - targets: ['ip-privada-ec2:9100']
+        labels:
+          hostname: Sv-Ec2-Monitoreo
+
+###### Monitoreo Contenedores Docker ######
+###########################################
+
+  - job_name: 'cadvisor'
+    scrape_interval: 5s
+    static_configs:
+
+# Producción
+      - targets: ['ip-privada-ec2:8888']
+        labels:
+          hostname: Sv-Ec2-Monitoreo

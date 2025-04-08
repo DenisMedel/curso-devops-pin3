@@ -1,0 +1,110 @@
+version: '3.5'
+services:
+ 
+  traefik-back:
+    image: traefik:2.9.9 
+    container_name: traefik-monitoreo-backend
+    command: 
+      - '--entryPoints.web.address=:80'
+      - '--entryPoints.http.forwardedHeaders.insecure'
+      - '--api=false'
+      - '--api.dashboard=false'
+      - '--api.insecure=false'
+      - '--providers.providersThrottleDuration=2s'
+      - '--providers.docker'
+      - '--providers.docker.watch=true'
+      - '--providers.docker.exposedbydefault=false'
+      - '--providers.docker.network=monitoreo_monitoreo'
+    ports:
+      - 81:80
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - monitoreo
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "3"
+    
+  grafana:
+    image: grafana/grafana:11.5.2
+    container_name: grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD={{ gf_pass }}
+      - GF_SERVER_ROOT_URL=https://mi-dominio
+      - GF_SERVER_DOMAIN=mi-dominio
+      - GF_RENDERING_SERVER_URL=http://renderer:8081/render
+      - GF_RENDERING_CALLBACK_URL=http://grafana:3000/
+    volumes:
+      - ./grafana/data:/var/lib/grafana
+      - ./grafana/grafana.ini:/etc/grafana/grafana.ini
+    restart: unless-stopped
+    networks:
+      - monitoreo    
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.curso-monitor.entrypoints: web
+      traefik.http.routers.curso-monitor.rule: PathPrefix(`/`)
+      traefik.http.routers.curso-monitor.service: curso-monitor-service
+      traefik.http.services.curso-monitor-service.loadbalancer.server.port: "3000"
+
+  renderer:
+    image: grafana/grafana-image-renderer:3.12.3
+    container_name: renderer
+    restart: unless-stopped
+    ports:
+      - 8081:8081
+    networks:
+      - monitoreo
+
+  loki:
+    image: grafana/loki:2.9.13
+    container_name: loki
+    user: root
+    volumes:
+      - ./loki/loki-config.yml:/mnt/config/loki-config.yml
+      - ./loki/loki-data:/tmp
+    ports:
+      - 3100:3100
+    command: -config.file=/mnt/config/loki-config.yml
+    restart: unless-stopped
+    networks:
+      - monitoreo    
+
+  promtail:
+    image: grafana/promtail:2.9.13
+    container_name: promtail
+    volumes:
+      - /opt/dockerfiles/traefik-front-certs/logs:/opt/dockerfiles/traefik-front-certs/logs:ro
+      - ./promtail/promtail.yml:/etc/promtail/promtail.yml
+      - ./promtail/tmp:/tmp
+    command: -config.file=/etc/promtail/promtail.yml
+    networks:
+      - monitoreo
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus:v3.2.1
+    container_name: prometheus
+    privileged: true
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    command:
+      - --web.enable-remote-write-receiver
+      - --enable-feature=native-histograms
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.retention.time=8d
+    ports:
+      - '9090:9090'
+    restart: unless-stopped    
+    networks:
+      - monitoreo
+
+volumes:
+  prometheus-data:  
+
+networks:
+  monitoreo:

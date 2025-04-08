@@ -1,0 +1,20 @@
+http:
+  routers:
+    to-curso-monitor:
+      entrypoints: websecure
+      rule: "Host(`mi-dominio`) && ClientIP (`mi-ip-publica/32`)" # Permite acceso solamente a la IP/s definida/s
+      tls:
+        certresolver: curso-monitoreo
+      service: curso-monitor-service
+
+    redirect-curso-monitor-http:
+      entrypoints: web
+      rule: "Host(`mi-dominio`)"
+      middlewares: "redirect-http"
+      service: curso-monitor-service
+
+  services:
+      curso-monitor-service:
+        loadBalancer:
+          servers:
+            - url: http://ip-privada-ec2-grafana:81

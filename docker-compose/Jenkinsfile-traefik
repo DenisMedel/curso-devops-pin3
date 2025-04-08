@@ -33,7 +33,7 @@ pipeline {
             }
         }
 
-        stage('Deploy de Monitoreo') {
+        stage('Deploy de Traefik-Frontend') {
             environment {
                 ANSIBLE_CONFIG = "${WORKSPACE}/docker-compose/ansible/ansible.cfg"
             }

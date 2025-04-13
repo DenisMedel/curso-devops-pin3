@@ -1,0 +1,5 @@
+apiVersion: v2
+name: nginx-monitor
+description: Despliegue de NGINX con exporter y ServiceMonitor
+version: 0.1.0
+appVersion: "1.27.0"

@@ -1,0 +1,33 @@
+grafana:
+  adminPassword: "admin"
+  service:
+    type: NodePort
+    nodePort: 31000
+  adminPassword: "admin"
+  persistence:
+    enabled: true
+    storageClassName: "gp2"
+    accessModes:
+      - ReadWriteOnce    
+    size: 5Gi
+  ingress:
+    enabled: false
+
+prometheus:
+  service:
+    type: ClusterIP
+  prometheusSpec:
+    retention: 7d
+    serviceMonitorSelectorNilUsesHelmValues: false
+    podMonitorSelectorNilUsesHelmValues: false
+
+alertmanager:
+  enabled: true
+  service:
+    type: ClusterIP
+
+nodeExporter:
+  enabled: true
+
+kubeStateMetrics:
+  enabled: true

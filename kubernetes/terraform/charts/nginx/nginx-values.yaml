@@ -1,0 +1,22 @@
+replicaCount: 1
+
+image:
+  repository: nginx
+  tag: "1.27.0"
+  pullPolicy: IfNotPresent
+
+exporter:
+  enabled: true
+  repository: nginx/nginx-prometheus-exporter
+  tag: "0.11.0"
+  port: 9113
+  nginxStatusUrl: http://localhost:8080/nginx_status
+
+service:
+  port: 80
+  targetPort: 80
+
+serviceMonitor:
+  enabled: true
+  interval: 15s
+  scrapeTimeout: 10s

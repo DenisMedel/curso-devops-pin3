@@ -62,6 +62,14 @@ resource "aws_security_group" "sg_monitoreo" {
   }
 
   ingress {
+    description = "Permite entrada HTTPs Traefik"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = var.sg_ingress_traefik
+  }
+
+  ingress {
     description = "Allow inbound SSH traffic"
     from_port   = 22
     to_port     = 22

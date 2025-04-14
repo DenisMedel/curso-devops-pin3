@@ -1,0 +1,13 @@
+# Traefik Logs Rotate >> /etc/logrotate.d/traefik
+
+/opt/dockerfiles/traefik-front-certs/logs/*.log {
+  daily
+  size 5G
+  rotate 1
+  nocompress
+  missingok
+  notifempty
+  postrotate
+    docker kill --signal="USR1" traefik-front
+  endscript
+}

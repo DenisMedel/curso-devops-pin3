@@ -8,6 +8,8 @@ docker-compose/terraform/.terraform.lock.hcl
 docker-compose/terraform/lockstate/.terraform.lock.hcl
 docker-compose/terraform/lockstate/terraform.tfstate
 docker-compose/terraform/lockstate/.terraform
+docker-compose/terraform/terraform.tfstate
+docker-compose/terraform/terraform.tfstate.backup
 
 kubernetes/terraform/.terraform/
 kubernetes/terraform/.terraform.lock.hcl

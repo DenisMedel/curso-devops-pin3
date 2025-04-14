@@ -20,12 +20,12 @@
 
     - name: Copia el provider para Monitoreo Central
       template:
-        src:  ../traefik-front-certs/curso-monitoreo.yml
+        src:  ../traefik-front/curso-monitoreo.yml
         dest: "{{ static_home }}/traefik-front-certs/providers/curso-monitoreo.yml"
 
     - name: Copia el redirect de HTTP a HTTPs
       template:
-        src:  ../traefik-front-certs/redirect-http.yml
+        src:  ../traefik-front/redirect-http.yml
         dest: "{{ static_home }}/traefik-front-certs/docker-compose-traefik.yml"        
 
     - name: Levanta Traefik de Frontend

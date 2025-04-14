@@ -29,7 +29,7 @@
 
     - name: Copia config Loki
       template:
-        src:  ../monitoreo/central/loki/loki-config-yml
+        src:  ../monitoreo/central/loki/loki-config.yml
         dest: "{{ static_home }}/central/loki/loki-config.yml"
 
     - name: Copia config prometheus

@@ -16,6 +16,7 @@
       - "{{static_home}}/central/loki"
       - "{{static_home}}/central/prometheus"
       - "{{static_home}}/central/promtail"
+      - "{{static_home}}/traefik-front-certs/providers"
 
     - name: Copia el docker-compose para agentes de monitoreo
       template:

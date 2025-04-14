@@ -76,7 +76,7 @@ services:
     image: grafana/promtail:2.9.13
     container_name: promtail
     volumes:
-      - /opt/dockerfiles/traefik-front-certs/logs:/opt/dockerfiles/traefik-front-certs/logs:ro
+      - /opt/dockerfiles/monitoreo/traefik-front-certs/logs:/opt/dockerfiles/monitoreo/traefik-front-certs/logs:ro
       - ./promtail/promtail.yml:/etc/promtail/promtail.yml
       - ./promtail/tmp:/tmp
     command: -config.file=/etc/promtail/promtail.yml

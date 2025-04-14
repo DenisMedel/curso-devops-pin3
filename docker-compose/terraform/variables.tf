@@ -18,6 +18,11 @@ variable "sg_ingress_monitoreo" {
   description = "CIDR para sg trafico ingress" 
 }
 
+variable "sg_ingress_traefik" {
+  type        = list(string)
+  description = "CIDR para sg trafico ingress"
+}
+
 variable "ec2_ami_monitoreo" {
   type        = string
   description = "ami de la instancia ec2 de monitoreo APD"

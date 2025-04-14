@@ -3,16 +3,6 @@
     gather_facts: false
     tasks:
 
-    - name: Crea directorios del proyecto
-      become: true
-      file:
-         path: "{{ item }}"
-         owner: ubuntu
-         group: ubuntu
-         state: directory
-      with_items:
-      - "{{static_home}}/traefik-front-certs/providers"
-
     - name: Copia el docker-compose para Trafik Frontend
       template:
         src:  ../traefik-front/docker-compose-traefik.yml

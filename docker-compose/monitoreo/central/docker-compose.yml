@@ -38,8 +38,7 @@ services:
       - GF_RENDERING_SERVER_URL=http://renderer:8081/render
       - GF_RENDERING_CALLBACK_URL=http://grafana:3000/
     volumes:
-      - ./grafana/data:/var/lib/grafana
-      - ./grafana/grafana.ini:/etc/grafana/grafana.ini
+      - grafana-data:/var/lib/grafana
     restart: unless-stopped
     networks:
       - monitoreo    
@@ -104,7 +103,8 @@ services:
       - monitoreo
 
 volumes:
-  prometheus-data:  
+  prometheus-data:
+  grafana-data:
 
 networks:
   monitoreo:

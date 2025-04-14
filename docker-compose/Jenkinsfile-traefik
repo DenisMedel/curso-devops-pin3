@@ -28,7 +28,7 @@ pipeline {
                     credRegistry = "REGISTRY_CREDENTIALS"
                     credNodoAplicacion = "MONITOREO_${params.Cliente}_${params.Entorno}".toUpperCase()
                     credAnsibleVaults = "MONITOREO_ANSIBLE_VAULTS_${params.Cliente}_${params.Entorno}".toUpperCase()
-                    inventory = "inventory-agentes-${params.Cliente}-${params.Entorno}-encrypted.yml".toLowerCase()
+                    inventory = "encrypted-inventory-agentes-${params.Cliente}-${params.Entorno}.yml".toLowerCase()
                 }
             }
         }

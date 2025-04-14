@@ -16,4 +16,4 @@ scrape_configs:
     labels:
       job: Traefik-Sv-Monitoreo
       host: Traefik-Sv-monitoreo
-      __path__: /opt/dockerfiles/traefik-front-certs/logs/*.log
+      __path__: /opt/dockerfiles/monitoreo/traefik-front-certs/logs/*.log

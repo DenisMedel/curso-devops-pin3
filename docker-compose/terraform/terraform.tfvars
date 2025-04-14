@@ -2,7 +2,9 @@ vpc_cidr_monitoreo = "10.0.0.0/16"
 
 sub_public_monitoreo = "10.0.0.0/24"
 
-sg_ingress_monitoreo = ["24.232.148.139/32", "190.123.91.63/32"]
+sg_ingress_monitoreo = ["mi-ip-publica"]
+
+sg_ingress_traefik = ["0.0.0.0/0"]
 
 ec2_ami_monitoreo = "ami-0fc5d935ebf8bc3bc"
 
